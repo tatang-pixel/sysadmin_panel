@@ -1,0 +1,91 @@
+<!DOCTYPE>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Termux Node Monitor</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+     <div class="container">
+     <h2>SYSTEM MONITORING</h2>
+
+        <!-- card cpu -->
+      <div class="card">
+        <div class="card-header">
+          <span>CPU Usage</span>
+          <span id="cpu-text">0%</span>
+        </div>
+        <div class="progress-bar">
+         <div id="cpu-bar" class="fill"></div>
+    </div>
+   </div>      
+         <!-- card RAM -->
+       <div class="card">
+         <div class="card-header">
+           <span>RAM</span>
+           <span id="ram-text">0%</span>
+          </div>
+          <div class="progress-bar">
+           <div id="ram-bar" class="fill"></div>
+     </div> 
+      <div class="sub-text" id="ram-detail">0 GB / 0 GB</div>
+       </div>
+  
+          <!-- card Storage -->
+        <div class="card">
+         <div class="card-header">
+           <span>INTERNAL STORAGE</span>
+           <span id="storage-text">0%</span>     
+          </div>
+           <div class="progress-bar">
+            <div id="storage-bar" class="fill"></div>
+      </div>
+     <div class="sub-text" id="storage-detail">0 GB / 0 GB</div>
+      </div>
+            <!-- CARD BATTERY -->
+        <div class="card">
+         <div class="card-header">
+           <span>Battery Status</span>
+           <span id="battery-text">0%</span>
+          </div>
+         <div class="progress-bar">
+        <div id="battery-bar" class="fill"></div>
+       </div>
+       <div class="sub-text" id="battery-detail">Status: -</div>
+         </div>
+              <!-- Card info Tambahan -->
+         <div class="card">
+           <div class="card-header">
+             <span>IP Address</span>
+             <span id="ip-text">127.0.0.1</span>
+           </div>
+          </div>
+         <div class="card">
+          <div class="card-header" style="margin-top: 10px;">
+             <span>System Uptime</span>
+             <span id="uptime-text">0j 0m</span>
+          </div>
+       </div>
+     <script src="script.js"></script>
+   </body>
+ </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

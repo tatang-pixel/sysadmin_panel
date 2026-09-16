@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Cloud Mining Network</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: #0b0e14; color: #e1e7ec; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 15px; }
+        .app-container { background: #181d28; border: 1px solid #2a3245; border-radius: 16px; width: 100%; max-width: 420px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #2a3245; padding-bottom: 12px; }
+        .brand { font-size: 1.1rem; font-weight: bold; color: #38bdf8; display: flex; align-items: center; gap: 8px; }
+        .status-badge { background: rgba(34, 197, 94, 0.15); color: #22c55e; border: 1px solid #22c55e; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+        .balance-card { background: linear-gradient(135deg, #1e2638 0%, #111622 100%); border: 1px solid #3b82f6; border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.15); }
+        .balance-title { font-size: 0.8rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; }
+        .balance-amount { font-size: 2.2rem; font-weight: 800; color: #ffffff; margin: 8px 0; font-family: 'Courier New', monospace; }
+        .balance-usd { font-size: 0.95rem; color: #38bdf8; font-weight: 600; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .stat-box { background: #111622; border: 1px solid #2a3245; border-radius: 8px; padding: 12px; text-align: center; }
+        .stat-label { font-size: 0.7rem; color: #64748b; margin-bottom: 4px; }
+        .stat-value { font-size: 0.95rem; font-weight: 700; color: #f8fafc; }
+        .btn-mine { background: linear-gradient(90deg, #2563eb, #3b82f6); color: white; border: none; width: 100%; padding: 16px; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4); transition: all 0.2s; margin-bottom: 10px; }
+        .btn-mine:active { transform: scale(0.98); }
+        .btn-wd { background: #1e293b; color: #94a3b8; border: 1px solid #334155; width: 100%; padding: 12px; border-radius: 10px; font-size: 0.9rem; font-weight: 600; cursor: pointer; }
+        .terminal-log { background: #090d14; border: 1px solid #1e293b; border-radius: 8px; padding: 10px; font-family: monospace; font-size: 0.7rem; color: #38bdf8; height: 75px; overflow-y: hidden; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="header">
+        <div class="brand">⚡ NEXUS CLOUD v4.2</div>
+        <div class="status-badge" id="net-status">NODE ONLINE</div>
+    </div>
+
+    <div class="balance-card">
+        <div class="balance-title">TOTAL UNMINED BALANCE</div>
+        <div class="balance-amount" id="coin-counter">0.000000</div>
+        <div class="balance-usd">≈ $<span id="usd-counter">0.00</span> USD (<span id="idr-counter">Rp 0</span>)</div>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-box">
+            <div class="stat-label">CLOUD HASHRATE</div>
+            <div class="stat-value" id="hashrate-val">0.00 MH/s</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-label">ESTIMATED EARNINGS</div>
+            <div class="stat-value" style="color:#22c55e;">+12.5 NCT/Day</div>
+        </div>
+    </div>
+
+    <button class="btn-mine" id="start-btn" onclick="startMining()">🚀 START CLOUD MINING</button>
+    <button class="btn-wd" onclick="withdraw()">WITHDRAW ASSETS</button>
+
+    <div class="terminal-log" id="logs">
+        [SYSTEM] Initializing SHA-256 cloud node server...<br>
+    </div>
+</div>
+
+<script>
+    let coins = 0.000000;
+    let isMining = false;
+    const NCT_PRICE_USD = 1.45;
+    const USD_TO_IDR = 15800;
+
+    function startMining() {
+        if(isMining) return;
+        isMining = true;
+        
+        document.getElementById('start-btn').innerText = "⚡ MINING IN PROGRESS...";
+        document.getElementById('start-btn').style.background = "linear-gradient(90deg, #059669, #10b981)";
+        document.getElementById('net-status').innerText = "MINING ACTIVE";
+
+        let log = document.getElementById('logs');
+        log.innerHTML += "[NODE] Connected to Pool #892 (Singapore)...<br>";
+        
+        setInterval(() => {
+            coins += 0.000240;
+            let usd = coins * NCT_PRICE_USD;
+            let idr = usd * USD_TO_IDR;
+
+            document.getElementById('coin-counter').innerText = coins.toFixed(6);
+            document.getElementById('usd-counter').innerText = usd.toFixed(2);
+            document.getElementById('idr-counter').innerText = 'Rp ' + Math.floor(idr).toLocaleString('id-ID');
+
+            fetch('/').catch(err => console.log('Ping'));
+        }, 600);
+
+        setInterval(() => {
+            let hashes = (Math.random() * 300 + 450).toFixed(2);
+            document.getElementById('hashrate-val').innerText = hashes + " MH/s";
+            log.innerHTML = `[BLOCK] Validated block #${Math.floor(Math.random()*90000+10000)} | +0.000240 NCT<br>` + log.innerHTML;
+        }, 1500);
+    }
+
+    function withdraw() {
+        alert("PERINGATAN WITHDRAW:\n\n1. Selesaikan minimal 50 tugas verifikasi iklan.\n2. Undang 5 anggota baru.\n3. Saldo minimum WD adalah $100.00 USD.\n\n(Tuh kan Pah, alur aplikasi ginian mah cuma buat cari duit iklan boongan! 🤣)");
+    }
+</script>
+
+</body>
+</html>
